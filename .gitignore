@@ -5,3 +5,5 @@
 *.pem
 *.db
 /bin
+*.rules
+galah.json

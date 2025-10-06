@@ -1,0 +1,6 @@
+---
+resources:
+  - namespace.yaml
+  - is.yaml
+  - deployment.yaml
+  - route.yaml

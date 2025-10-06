@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "3"
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"galah:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"galah\")].image"}]'
+    openshift.io/generated-by: OpenShiftNewApp
+  labels:
+    app: galah
+    app.kubernetes.io/component: galah
+    app.kubernetes.io/instance: galah
+  name: galah
+  namespace: galah
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      deployment: galah
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+      creationTimestamp: null
+      labels:
+        deployment: galah
+    spec:
+      containers:
+      - command:
+        - ./galah/galah
+        - -o
+        - /tmp/galah.json
+        - -f
+        - /tmp/cache.db
+        - -p
+        - openai
+        - -m
+        - llama-4-scout-17b-16e-w4a16
+        - -u
+        - http://llamastack-with-config-service.llama-stack:8321/v1/openai/v1
+        env:
+        - name: LLM_API_KEY
+          value: fake
+        image: ' '
+        imagePullPolicy: Always
+        name: galah
+        ports:
+        - containerPort: 443
+          protocol: TCP
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

@@ -1,0 +1,28 @@
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  labels:
+    app: galah
+    app.kubernetes.io/component: galah
+    app.kubernetes.io/instance: galah
+  name: galah
+  namespace: galah
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+  - annotations:
+      openshift.io/imported-from: quay.io/eformat/galah:latest
+    from:
+      kind: DockerImage
+      name: quay.io/eformat/galah:latest
+    generation: 2
+    importPolicy:
+      importMode: Legacy
+    name: latest
+    referencePolicy:
+      type: Source
+status: {}
